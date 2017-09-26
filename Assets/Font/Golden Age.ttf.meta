@@ -1,0 +1,22 @@
+fileFormatVersion: 2
+guid: 2c57d254ee517044c91096bb97f97e5d
+timeCreated: 1488816659
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Golden Age
+  fontNames:
+  - Golden Age
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 99f50fa83bf96044bade501669ace304, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

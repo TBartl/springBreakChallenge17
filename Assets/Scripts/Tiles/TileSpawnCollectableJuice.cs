@@ -6,7 +6,7 @@ public class TileSpawnCollectableJuice  : TileBasicJuice {
 
     public void OnCollectableSpawned() {
         // Replace this with your own juice
-        this.GetComponent<SpriteRenderer>().color = Color.grey;
+        this.GetComponent<Renderer>().material.color = Color.grey;
         SoundManager.S.tileCollectableSpawned.Play();
     }
 

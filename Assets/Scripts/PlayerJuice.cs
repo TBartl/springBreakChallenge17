@@ -5,6 +5,9 @@ using UnityEngine;
 //Modify this as much as you want
 public class PlayerJuice : MonoBehaviour {
     Player player;
+    bool stretching = false;
+    bool squashing   = false;
+    public GameObject pivot;
 
     void Awake() {
         player = this.GetComponent<Player>();
@@ -19,14 +22,18 @@ public class PlayerJuice : MonoBehaviour {
     // For example, if your animation depends on the player speed set that here.
 	void Update () {
         // Here are some variables you may want to use
-        Vector3 velocity = player.GetVelocity();
-        bool grounded = player.GetIsGrounded();
+        
+        if (player.GetIsGrounded() == false && stretching == false)
+            pivot.transform.localScale = GetStretchAmount();
+        else if (squashing == false)
+            pivot.transform.localScale = Vector3.one;
     }
 
     // All of the functions below are called by other scripts
 
     public void OnJump() {
         SoundManager.S.playerJump.Play();
+        StartCoroutine(StartJumpStretch());
     }
 
     public void OnJumpOffEnemy() {
@@ -41,6 +48,7 @@ public class PlayerJuice : MonoBehaviour {
 
     public void OnLanded() {
         SoundManager.S.playerLanded.Play();
+        StartCoroutine(HitGroundSquash());
     }
 
     public void OnCollectedPowerup() {
@@ -59,5 +67,49 @@ public class PlayerJuice : MonoBehaviour {
 
     public void OnCompletedLevel() {
 
+    }
+
+    IEnumerator StartJumpStretch() {
+        stretching = true;
+        float time = .1f;
+        Vector3 original = pivot.transform.localScale;
+        for (float f = 0; f < time; f += Time.deltaTime) {
+            if (player.GetIsGrounded() == true) {
+                stretching = false;
+                break;
+            }
+            float percent = f / time;
+            pivot.transform.localScale = Vector3.Lerp(original, GetStretchAmount(), percent);
+            yield return null;
+        }
+        stretching = false;
+    }
+
+    IEnumerator HitGroundSquash() {
+        squashing = true;
+        float time = .25f;
+        Vector3 original = pivot.transform.localScale;
+        Vector3 lowestPoint = new Vector3(1 + .6f, 1 - .6f, 1);
+        Vector3 regularPoint = new Vector3(1, 1, 1);
+        for (float f = 0; f < time; f += Time.deltaTime) {
+            if (player.GetIsGrounded() == false) {
+                squashing = false;
+                break;
+            }
+            if (f <= time / 2f) {
+                float percent = f / (time / 2f);
+                pivot.transform.localScale = Vector3.Lerp(original, lowestPoint, percent);
+            }
+            else {
+                float percent = (f - time / 2f) / (time / 2f);
+                pivot.transform.localScale = Vector3.Lerp(lowestPoint, regularPoint, percent);
+            }
+            yield return null;
+        }
+    }
+
+    Vector3 GetStretchAmount() {
+        float amountToStrech = Mathf.Abs(player.GetVelocity().y) / player.initialJumpVelocity;
+        return new Vector3(1 - .4f * amountToStrech, 1 + .4f * amountToStrech, 1);
     }
 }

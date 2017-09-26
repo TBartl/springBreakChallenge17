@@ -49,7 +49,18 @@ public class GameManager : MonoBehaviour {
 
     public void ChangePoints(int pointChange) {
         score += pointChange;
-        scoreText.text = score.ToString();
+        scoreText.text = "Score " + score.ToString();
         juice.OnPointsChanged(pointChange);        
+
+
+        if (pointChange != -1) {
+            StartCoroutine(PopPoints());
+        }
+    }
+
+    IEnumerator PopPoints() {
+        scoreText.rectTransform.localScale = Vector3.one * 1.1f;
+        yield return new WaitForSeconds(.1f);
+        scoreText.rectTransform.localScale = Vector3.one;
     }
 }

@@ -1,18 +1,26 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 //Modify this as much as you want
 public class GameManagerJuice : MonoBehaviour {
 
+    public Text timeText;
+
     // Use this for initialization
     void Start() {
-
     }
 
     // Update is called once per frame, use this for anything you need to persistently update
     void Update() {
-
+        if (!GameManager.S.gameEnding) {
+            string time = Time.timeSinceLevelLoad.ToString("0.00");
+            while (time.Length < 6) {
+                time = "0" + time;
+            }
+            timeText.text = "Time " + time;
+        }
     }
 
     public void OnPlayerDied() {
@@ -43,4 +51,6 @@ public class GameManagerJuice : MonoBehaviour {
             }
         }
     }
+
+    
 }
