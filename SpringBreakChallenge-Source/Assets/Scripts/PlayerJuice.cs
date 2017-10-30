@@ -32,6 +32,9 @@ public class PlayerJuice : MonoBehaviour {
     // All of the functions below are called by other scripts
 
     public void OnJump() {
+		if (!this.enabled)
+			return;
+
         SoundManager.S.playerJump.Play();
         StartCoroutine(StartJumpStretch());
     }
@@ -43,11 +46,15 @@ public class PlayerJuice : MonoBehaviour {
 
     // When the player hits any tile with their head
     public void OnHitHead() {
-        SoundManager.S.playerHitHead.Play();
+		if (!this.enabled)
+			return;
+		SoundManager.S.playerHitHead.Play();
     }
 
     public void OnLanded() {
-        SoundManager.S.playerLanded.Play();
+		if (!this.enabled)
+			return;
+		SoundManager.S.playerLanded.Play();
         StartCoroutine(HitGroundSquash());
     }
 
